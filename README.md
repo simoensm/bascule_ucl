@@ -1,95 +1,56 @@
 # bascule_ucl
 
-This Python script automatically scrapes the daily menu image from UCLouvain’s restaurant La Bascule, extracts the text using OCR, identifies the meal for the current weekday, and sends it as a Telegram notification.
+Daily Menu Scraper and Telegram Notifier
 
-Features
-
-Scrapes the daily menu image from UCLouvain
-Preprocesses the image for better OCR results
-Uses Tesseract OCR to read the daily meals
-Extracts only the menu for today
-Sends notifications via Telegram Bot API
-Optional push notification using notify.run
+This script scrapes the daily menu image from UCLouvain’s restaurant La Bascule, extracts text using OCR, identifies the dish for the current weekday, and sends it through a Telegram bot.
 
 Requirements
 
-Python Packages
-
-Install all dependencies:
+Install the required Python packages:
 
 pip install requests beautifulsoup4 pillow pytesseract
 
-Tesseract OCR
 
-You must install Tesseract OCR on your system.
+Install Tesseract OCR:
 
-Windows:
-Download the installer from:
-https://github.com/tesseract-ocr/tesseract
+Windows users can download it from: https://github.com/tesseract-ocr/tesseract
 
-Then ensure the script points to the correct installation path:
+Update the path inside the script if necessary:
 
 pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
 
-🔧 How It Works
+Configuration
 
-Fetches the UCLouvain menu webpage.
-
-Detects and extracts the weekly menu image.
-
-Preprocesses the image: grayscale, filtering, thresholding.
-
-Crops the areas corresponding to each weekday.
-
-OCR is performed on each cropped zone.
-
-The script compares today’s date with the weekday.
-
-Sends the detected dish to Telegram and notify.run.
-
-🗂 Configuration
-
-Edit these values at the top of the script:
+Edit these constants in the script:
 
 URL = "https://www.uclouvain.be/fr/resto-u/la-bascule"
 TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
 CHAT_ID = "YOUR_CHAT_ID"
 
 
-To notify multiple users, add more POST requests:
+You can add more recipients by sending additional POST requests.
 
-requests.post(url, data={"chat_id": ANOTHER_CHAT_ID, "text": message})
+How It Works
+
+Downloads the webpage containing the weekly menu.
+
+Extracts the image using a CSS selector.
+
+Preprocesses the image (grayscale, filter, threshold).
+
+Crops predefined image areas corresponding to each weekday.
+
+Uses Tesseract OCR to read the text in each area.
+
+Determines today’s weekday.
+
+Sends the corresponding dish to the configured Telegram chat.
 
 Usage
 
-Run the script:
+Run:
 
 python menu_scraper.py
 
 
-Expected output on success:
-
-Notification envoyée pour Mardi
-
-
-If no menu is found or it's a weekend:
-
-Aujourd'hui n'est pas un jour de menu ou jour introuvable
-
-Project Structure
-menu-scraper
- ├── menu_scraper.py
- └── README.md
-
-Notes & Limitations
-
-OCR accuracy depends on the menu image quality.
-
-If UCLouvain changes their page layout, the CSS selector or crop coordinates may need to be updated.
-
-Image coordinates are tailored to the current design of the menu.
-
-Contributions
-
-Contributions, issues, and feature requests are welcome!
-Feel free to open a pull request.
+The script will print whether the menu was successfully retrieved and whether the notification was sent.
